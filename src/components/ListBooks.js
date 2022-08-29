@@ -8,6 +8,8 @@ import { booksUrl } from "../services/urlPaths";
 const ListBooks = () => {
     const [filter, SetFilter] = useState('');
     const [searchedBooks, setSearchedBooks] = useState(null);
+    const [showInfo, setShowInfo] = useState(false);
+
     let url = booksUrl;
 
     const { books, isLoading } = useFetchBooks(url)
@@ -65,11 +67,9 @@ const ListBooks = () => {
     function onSearch() {
         const i = document.getElementById('input')
         const wordToSearch = i.value.toLowerCase()
-        setSearchedBooks(books.filter(book => {
-            if (book.name.toLowerCase().includes(wordToSearch)) {
-                return book
-            }
-        }))
+        setSearchedBooks(books.filter(book => (book.name.toLowerCase().includes(wordToSearch))))
+        console.log('searchedBooks', searchedBooks)
+        setShowInfo(true)
     }
 
     function BookDetail() {
@@ -92,11 +92,12 @@ const ListBooks = () => {
                             <input
                                 type="text"
                                 id='input'
-                                placeholder="Enter a search word"
+                                placeholder="Search by word"
                             />
                             <button type="submit" onClick={onSearch} className="list-books-btn">Search</button>
+                            {showInfo && <p >* To see all results click on Search again</p>}
                         </form>
-                        <label >* Sort title by:</label>
+                        <h4 >Sort title by:</h4>
                         <div >
                             <button onClick={filterBooksAsc} className="list-books-title-btn">A - Z</button>
                             <button onClick={filterBooksDesc} className="list-books-title-btn">Z - A</button>
@@ -123,7 +124,6 @@ const ListBooks = () => {
             </div>
         )
     }
-
 
     return (
         <div>
